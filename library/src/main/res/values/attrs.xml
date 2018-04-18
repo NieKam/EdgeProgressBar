@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <declare-styleable name="EdgeProgressBar">
+
+    <attr name="primary_color" format="color" />
+    <attr name="secondary_color" format="color" />
+    <attr name="stroke_width" format="dimension" />
+    <attr name="indeterminate" format="boolean" />
+    <attr name="max" format="integer" />
+    <attr name="start_progress" format="float" />
+    <attr name="progress_anim_duration" format="integer" />
+
+  </declare-styleable>
+
+</resources>
