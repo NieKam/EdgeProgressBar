@@ -22,8 +22,8 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
   }
 
   companion object Constants {
-    private val STEP_WITH_ANIMATIONS = 10
-    private val MAX = 100
+    private const val STEP_WITH_ANIMATIONS = 5
+    private const val MAX = 100
   }
 
   private var mIsAnimationEnabled = false

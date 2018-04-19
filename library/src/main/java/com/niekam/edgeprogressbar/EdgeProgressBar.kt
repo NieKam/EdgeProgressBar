@@ -173,14 +173,13 @@ class EdgeProgressBar @JvmOverloads constructor(
   }
 
   fun setProgress(progress: Float, animation: Boolean) {
-    mProgress = progress.coerceIn(0F, max.toFloat())
-
-    if (mIsIndeterminate) {
+    val normalizedProgress = progress.coerceIn(0F, max.toFloat())
+    if (mIsIndeterminate || mProgress == normalizedProgress) {
       return
     }
 
-    val targetPhase = getPhaseForProgress(progress)
-
+    mProgress = normalizedProgress
+    val targetPhase = getPhaseForProgress(mProgress)
     if (animation) {
       startProgressUpdateAnimation(targetPhase)
     } else {
@@ -195,7 +194,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       startIndeterminateAnimations()
     } else if (isIndeterminateAnimPending()) {
       stopAnimatingIndeterminate()
-      setProgress(mProgress)
+      drawProgress(mProgressPhase)
     }
   }
 
@@ -254,11 +253,11 @@ class EdgeProgressBar @JvmOverloads constructor(
   }
 
   private fun startProgressUpdateAnimation(targetPhase: Float) {
-    val backToZero = targetPhase > (BLANK_LINE_SIZE - mStep) && mProgressPhase < mStep
+    val backToZero = targetPhase == BLANK_LINE_SIZE && mProgressPhase == 0F
 
     if (backToZero) {
       // Current progress is max, next is zero. Force redraw to don't animate back progress.
-      drawProgress(0F)
+      drawProgress(BLANK_LINE_SIZE)
       return
     }
 
