@@ -50,10 +50,10 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   private fun initValues() {
-    val progress = mEdgeProgress.getProgress()
+    val progress = mEdgeProgress.progress
     mProgressSeekBar.progress = progress.toInt()
     mProgressText.text = "$progress"
-    mIndeterminateSwitch.isChecked = mEdgeProgress.isIndeterminate()
+    mIndeterminateSwitch.isChecked = mEdgeProgress.indeterminate
     mStrokeWidthSeekBar.progress = mEdgeProgress.strokeWidth
   }
 
@@ -75,6 +75,10 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     super.onStop()
   }
 
+  override fun isIndeterminate(): Boolean {
+    return mEdgeProgress.indeterminate
+  }
+
   override fun getProgressValue(): Int = mProgressSeekBar.progress
 
   override fun setProgressText(progress: String) {
@@ -87,7 +91,13 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   override fun setEdgeProgress(progress: Int, withAnimation: Boolean) {
-    mEdgeProgress.setProgress(progress.toFloat(), withAnimation)
+    // I could call mEdgeProgress.setProgress(progress.toFloat(), withAnimation)
+    // but I want to show how you can set progress in kotlin.
+    if (withAnimation) {
+      mEdgeProgress.setProgress(progress.toFloat(), true)
+    } else {
+      mEdgeProgress.progress = progress.toFloat()
+    }
   }
 
   override fun setProgressSectionVisible(isEnabled: Boolean) {
@@ -106,7 +116,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   override fun setIndeterminate(isIndeterminate: Boolean) {
-    mEdgeProgress.setIndeterminate(isIndeterminate)
+    mEdgeProgress.indeterminate = isIndeterminate
   }
 
   override fun setPrimaryColor(color: Int) {

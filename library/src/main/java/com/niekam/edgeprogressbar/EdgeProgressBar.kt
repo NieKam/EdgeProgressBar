@@ -15,15 +15,13 @@ import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import com.niekam.edgeprogressbar.Constants.BLANK_LINE_SIZE
+import com.niekam.edgeprogressbar.Constants.DEFAULT_INDETERMINATE_TYPE
 import com.niekam.edgeprogressbar.Constants.DEFAULT_MAX
 import com.niekam.edgeprogressbar.Constants.DEFAULT_PROGRESS_DURATION_MS
 import com.niekam.edgeprogressbar.Constants.DEFAULT_STEP
 import com.niekam.edgeprogressbar.Constants.INDETERMINATE_ANIMATION_DURATION_MS
 import com.niekam.edgeprogressbar.Constants.PATH_DASH_SEGMENTS
 import com.niekam.edgeprogressbar.Constants.TAG
-import com.niekam.edgeprogressbar.Tools.createPathEffect
-import com.niekam.edgeprogressbar.Tools.getDefaultColor
-import com.niekam.edgeprogressbar.Tools.getDefaultStrokeWidth
 
 /**
  * Copyright by Kamil Niezrecki
@@ -39,23 +37,23 @@ class EdgeProgressBar @JvmOverloads constructor(
   private val mMainRect = RectF()
   private val mPathMeasure = PathMeasure()
 
-  private var mIsIndeterminate = false
   private var mProgressPhase = BLANK_LINE_SIZE
   private var mIndeterminateAnimation: ValueAnimator? = null
   private var mStep = DEFAULT_STEP
   private var mProgressAnimation: ValueAnimator? = null
-  private var mProgress = 0F
   private var mTotalLength: Float = 0F
   private var mLineSegmentSize: Float = 0F
   private var mWidth = -1
   private var mHeight = -1
   private var mInset: Float
+  private var mIndeterminateType: Int
 
   /**
    * Public
    */
   var progressAnimationDuration = DEFAULT_PROGRESS_DURATION_MS
-  var primaryColor = getDefaultColor(context)
+  
+  var primaryColor = context.resources.getDefaultColor()
     set(value) {
       mPrimaryLinePaint.color = value
       field = value
@@ -63,7 +61,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       invalidate()
     }
 
-  var secondaryColor = getDefaultColor(context)
+  var secondaryColor = context.resources.getDefaultColor()
     set(value) {
       mSecondaryLinePaint.color = value
       field = value
@@ -75,6 +73,30 @@ class EdgeProgressBar @JvmOverloads constructor(
     set(value) {
       field = value
       mStep = BLANK_LINE_SIZE / value
+    }
+
+  private var mProgress = 0F
+  var progress: Float
+    get() {
+      return mProgress
+    }
+    set(value) {
+      setProgress(value, false)
+    }
+
+  private var mIsIndeterminate = false
+  var indeterminate: Boolean
+    get() {
+      return mIsIndeterminate
+    }
+    set(value) {
+      mIsIndeterminate = value
+      if (mIsIndeterminate) {
+        startIndeterminateAnimations()
+      } else if (isIndeterminateAnimPending()) {
+        stopAnimatingIndeterminate()
+        drawProgress(mProgressPhase)
+      }
     }
 
   private var mStrokeWidth: Float = 0f
@@ -96,16 +118,19 @@ class EdgeProgressBar @JvmOverloads constructor(
     val a = context.obtainStyledAttributes(attrs, R.styleable.EdgeProgressBar, defStyleAttr, 0)
 
     try {
+      mIndeterminateType = a.getInt(
+          R.styleable.EdgeProgressBar_indeterminate_type,
+          DEFAULT_INDETERMINATE_TYPE)
       mIsIndeterminate = a.getBoolean(R.styleable.EdgeProgressBar_indeterminate, mIsIndeterminate)
       primaryColor = a.getColor(
           R.styleable.EdgeProgressBar_primary_color,
-          getDefaultColor(context))
+          context.resources.getDefaultColor())
       secondaryColor = a.getColor(
           R.styleable.EdgeProgressBar_secondary_color,
-          getDefaultColor(context))
+          context.resources.getDefaultColor())
       mStrokeWidth = a.getDimension(
           R.styleable.EdgeProgressBar_stroke_width,
-          getDefaultStrokeWidth(context))
+          context.resources.getDefaultStrokeWidth())
       max = a.getInt(
           R.styleable.EdgeProgressBar_max,
           max)
@@ -149,7 +174,7 @@ class EdgeProgressBar @JvmOverloads constructor(
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
 
-    if (isIndeterminate()) {
+    if (mIsIndeterminate) {
       canvas.drawPath(mPath, mPrimaryLinePaint)
       canvas.drawPath(mPath, mSecondaryLinePaint)
     } else {
@@ -160,18 +185,6 @@ class EdgeProgressBar @JvmOverloads constructor(
   /**
    * Public API
    */
-  fun isIndeterminate(): Boolean {
-    return mIsIndeterminate
-  }
-
-  fun getProgress(): Float {
-    return mProgress
-  }
-
-  fun setProgress(progress: Float) {
-    setProgress(progress, false)
-  }
-
   fun setProgress(progress: Float, animation: Boolean) {
     val normalizedProgress = progress.coerceIn(0F, max.toFloat())
     if (mIsIndeterminate || mProgress == normalizedProgress) {
@@ -184,17 +197,6 @@ class EdgeProgressBar @JvmOverloads constructor(
       startProgressUpdateAnimation(targetPhase)
     } else {
       drawProgress(targetPhase)
-    }
-  }
-
-  fun setIndeterminate(isIndeterminate: Boolean) {
-    mIsIndeterminate = isIndeterminate
-
-    if (mIsIndeterminate) {
-      startIndeterminateAnimations()
-    } else if (isIndeterminateAnimPending()) {
-      stopAnimatingIndeterminate()
-      drawProgress(mProgressPhase)
     }
   }
 
@@ -330,5 +332,9 @@ class EdgeProgressBar @JvmOverloads constructor(
 
     mIndeterminateAnimation?.cancel()
     mIndeterminateAnimation = null
+  }
+
+  private fun createPathEffect(pathLength: Float, phase: Float): DashPathEffect {
+    return DashPathEffect(floatArrayOf(pathLength, pathLength), (phase * pathLength))
   }
 }

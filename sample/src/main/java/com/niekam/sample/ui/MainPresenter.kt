@@ -19,6 +19,7 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
     fun setSecondaryColor(color: Int)
     fun showDialog(dialog: ColorPickerDialog)
     fun getResources(): Resources
+    fun isIndeterminate(): Boolean
   }
 
   companion object Constants {
@@ -27,6 +28,7 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
   }
 
   private var mIsAnimationEnabled = false
+  private var mProgress = 0
 
   override fun onViewAttached() {
     super.onViewAttached()
@@ -35,13 +37,15 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
     val viewContract = view as ViewContract
     viewContract.setProgressText(viewContract.getProgressValue().toString())
     viewContract.setMaxProgress(MAX)
+    viewContract.setProgressSectionVisible(!viewContract.isIndeterminate())
   }
 
   fun onProgressChanged(progress: Int) {
-    if (mIsAnimationEnabled && progress % STEP_WITH_ANIMATIONS != 0) {
+    if (mIsAnimationEnabled && Math.abs(mProgress - progress) < STEP_WITH_ANIMATIONS) {
       return
     }
 
+    mProgress = progress
     view?.setProgressText(progress.toString())
     view?.setEdgeProgress(progress, mIsAnimationEnabled)
   }
