@@ -9,7 +9,6 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PathMeasure
-import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
@@ -34,7 +33,6 @@ class EdgeProgressBar @JvmOverloads constructor(
   private val mPrimaryLinePaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mSecondaryLinePaint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG)
   private val mPath = Path()
-  private val mMainRect = RectF()
   private val mPathMeasure = PathMeasure()
 
   private var mProgressPhase = BLANK_LINE_SIZE
@@ -45,7 +43,6 @@ class EdgeProgressBar @JvmOverloads constructor(
   private var mLineSegmentSize: Float = 0F
   private var mWidth = -1
   private var mHeight = -1
-  private var mInset: Float
   private var mIndeterminateType: Int
 
   /**
@@ -106,7 +103,6 @@ class EdgeProgressBar @JvmOverloads constructor(
     }
     set(value) {
       mStrokeWidth = value.dpToPx
-      mInset = mStrokeWidth / 2F
       mPrimaryLinePaint.strokeWidth = mStrokeWidth
       mSecondaryLinePaint.strokeWidth = mStrokeWidth
     }
@@ -140,7 +136,6 @@ class EdgeProgressBar @JvmOverloads constructor(
       progressAnimationDuration = a.getInt(
           R.styleable.EdgeProgressBar_progress_anim_duration,
           DEFAULT_PROGRESS_DURATION_MS)
-      mInset = mStrokeWidth / 2F
     } finally {
       a.recycle()
     }
@@ -217,11 +212,8 @@ class EdgeProgressBar @JvmOverloads constructor(
     mWidth = width
     mHeight = height
 
-    mMainRect.set(0F, 0F, width.toFloat(), height.toFloat())
-    mMainRect.inset(mInset, mInset)
-
     mPath.reset()
-    mPath.addRect(mMainRect, Path.Direction.CW)
+    mPath.addRect(0F, 0F, width.toFloat(), height.toFloat(), Path.Direction.CW)
 
     mPathMeasure.setPath(mPath, false)
     mTotalLength = mPathMeasure.length
