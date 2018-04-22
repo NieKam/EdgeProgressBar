@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     mProgressSeekBar.progress = progress.toInt()
     mProgressText.text = "$progress"
     mIndeterminateSwitch.isChecked = mEdgeProgress.indeterminate
-    mStrokeWidthSeekBar.progress = mEdgeProgress.strokeWidth
+    mStrokeWidthSeekBar.progress = mEdgeProgress.lineWidth
   }
 
   private fun initListeners() {
@@ -121,12 +121,12 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
 
   override fun setPrimaryColor(color: Int) {
     mPrimaryColorView.setBackgroundColor(color)
-    mEdgeProgress.primaryColor = color
+    mEdgeProgress.progressLineColor = color
   }
 
   override fun setSecondaryColor(color: Int) {
     mSecondaryColorView.setBackgroundColor(color)
-    mEdgeProgress.secondaryColor = color
+    mEdgeProgress.tintColor = color
   }
 
   override fun showDialog(dialog: ColorPickerDialog) {
@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
 
   private val mStrokeWidthChangeListener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-      mEdgeProgress.strokeWidth = progress
+      mEdgeProgress.lineWidth = progress
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {

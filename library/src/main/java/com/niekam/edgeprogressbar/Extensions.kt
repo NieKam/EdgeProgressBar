@@ -1,6 +1,7 @@
 package com.niekam.edgeprogressbar
 
 import android.content.res.Resources
+import android.graphics.Paint
 import android.os.Build
 import com.niekam.edgeprogressbar.Constants.DEFAULT_COLOR
 import com.niekam.edgeprogressbar.Constants.DEFAULT_STROKE_WIDTH
@@ -25,4 +26,14 @@ fun Resources.getDefaultColor(): Int {
   } else {
     getColor(DEFAULT_COLOR)
   }
+}
+
+fun Paint.initLinePaint(lineWidth : Float, color: Int) {
+  this.color = color
+  this.style = Paint.Style.STROKE
+  this.strokeWidth = lineWidth
+  this.isDither = true
+  this.style = Paint.Style.STROKE
+  this.strokeJoin = Paint.Join.ROUND
+  this.strokeCap = Paint.Cap.ROUND
 }
