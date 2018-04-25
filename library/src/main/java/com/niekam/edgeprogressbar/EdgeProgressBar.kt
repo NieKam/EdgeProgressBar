@@ -16,13 +16,15 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import com.niekam.edgeprogressbar.Constants.BLANK_LINE_SIZE
+import com.niekam.edgeprogressbar.Constants.DEFAULT_INDETERMINATE_TYPE
 import com.niekam.edgeprogressbar.Constants.DEFAULT_MAX
 import com.niekam.edgeprogressbar.Constants.DEFAULT_PROGRESS_DURATION_MS
 import com.niekam.edgeprogressbar.Constants.DEFAULT_STEP
 import com.niekam.edgeprogressbar.Constants.TINT_ALPHA
 import com.niekam.edgeprogressbar.Constants.VISIBILITY_ANIM_DURATION
-import com.niekam.edgeprogressbar.effects.Effect
-import com.niekam.edgeprogressbar.effects.ZigZagEffect
+import com.niekam.edgeprogressbar.indeterminate.Effect
+import com.niekam.edgeprogressbar.indeterminate.EffectContract
+import com.niekam.edgeprogressbar.indeterminate.EffectType
 
 /**
  * Copyright by Kamil Niezrecki
@@ -30,21 +32,20 @@ import com.niekam.edgeprogressbar.effects.ZigZagEffect
 
 class EdgeProgressBar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+) : View(context, attrs, defStyleAttr), EffectContract {
 
-  private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mTintPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mProgressPath = Path()
   private val mPathMeasure = PathMeasure()
+  private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+  private val mProgressPath = Path()
+  private val mTintPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+  private var mHeight = -1
+  private var mIndeterminateEffect: Effect = EffectType.values()[DEFAULT_INDETERMINATE_TYPE].effect
+  private var mProgressAnimation: ValueAnimator? = null
   private var mProgressPhase = BLANK_LINE_SIZE
   private var mStep = DEFAULT_STEP
-  private var mProgressAnimation: ValueAnimator? = null
   private var mTotalLength: Float = 0F
   private var mWidth = -1
-  private var mHeight = -1
-
-  private val mZigZagEffect: Effect = ZigZagEffect()
 
   /**
    * Public
@@ -55,7 +56,7 @@ class EdgeProgressBar @JvmOverloads constructor(
     set(value) {
       mProgressPaint.color = value
       field = value
-      maybeResetIndeterminate()
+      mIndeterminateEffect.onColorsChange(intArrayOf(value, tintColor))
       invalidate()
     }
 
@@ -64,7 +65,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       mTintPaint.color = value
       mTintPaint.alpha = TINT_ALPHA
       field = value
-      maybeResetIndeterminate()
+      mIndeterminateEffect.onColorsChange(intArrayOf(progressLineColor, value))
       invalidate()
     }
 
@@ -91,9 +92,9 @@ class EdgeProgressBar @JvmOverloads constructor(
     set(value) {
       mIsIndeterminate = value
       if (mIsIndeterminate) {
-        mZigZagEffect.start()
-      } else if (mZigZagEffect.isPending()) {
-        mZigZagEffect.stop()
+        mIndeterminateEffect.start()
+      } else {
+        mIndeterminateEffect.stop()
         drawProgress(mProgressPhase)
       }
     }
@@ -108,7 +109,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       mLineWidth = value.dpToPx
       mProgressPaint.strokeWidth = mLineWidth
       mTintPaint.strokeWidth = mLineWidth
-      mZigZagEffect.setStrokeWidth(width)
+      mIndeterminateEffect.onLineWidthChange(mLineWidth)
     }
 
   /**
@@ -137,6 +138,11 @@ class EdgeProgressBar @JvmOverloads constructor(
       progressAnimationDuration = a.getInt(
           R.styleable.EdgeProgressBar_progress_anim_duration,
           DEFAULT_PROGRESS_DURATION_MS)
+
+      val indeterminateType = a.getInt(
+          R.styleable.EdgeProgressBar_indeterminate_type,
+          DEFAULT_INDETERMINATE_TYPE)
+      mIndeterminateEffect = EffectType.values()[indeterminateType].effect
     } finally {
       a.recycle()
     }
@@ -148,15 +154,15 @@ class EdgeProgressBar @JvmOverloads constructor(
 
   override fun onDetachedFromWindow() {
     super.onDetachedFromWindow()
-    if (mIsIndeterminate) {
-      mZigZagEffect.stop()
-    }
+    mIndeterminateEffect.onDetached()
   }
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
+    mIndeterminateEffect.onAttached(this)
+
     if (mIsIndeterminate) {
-      mZigZagEffect.start()
+      mIndeterminateEffect.start()
     }
   }
 
@@ -166,8 +172,8 @@ class EdgeProgressBar @JvmOverloads constructor(
     val height = measuredHeight
 
     if (width != mWidth || height != mHeight) {
-      transformPath(width, height)
-      mZigZagEffect.onSizeChanged(width, height)
+      mTotalLength = transformPath(width, height)
+      mIndeterminateEffect.onMeasure()
     }
   }
 
@@ -175,7 +181,7 @@ class EdgeProgressBar @JvmOverloads constructor(
     super.onDraw(canvas)
 
     if (mIsIndeterminate) {
-      mZigZagEffect.onDraw(canvas)
+      mIndeterminateEffect.onDraw(canvas)
     } else {
       canvas.drawPath(mProgressPath, mTintPaint)
       canvas.drawPath(mProgressPath, mProgressPaint)
@@ -253,7 +259,7 @@ class EdgeProgressBar @JvmOverloads constructor(
    * Private API
    */
 
-  private fun transformPath(width: Int, height: Int) {
+  private fun transformPath(width: Int, height: Int): Float {
     mWidth = width
     mHeight = height
 
@@ -261,13 +267,9 @@ class EdgeProgressBar @JvmOverloads constructor(
     mProgressPath.addRect(0F, 0F, width.toFloat(), height.toFloat(), Path.Direction.CW)
 
     mPathMeasure.setPath(mProgressPath, false)
-    mTotalLength = mPathMeasure.length
-
     mProgressPaint.pathEffect = createPathEffect(mTotalLength, getPhaseForProgress(mProgress))
 
-    if (mIsIndeterminate) {
-      maybeResetIndeterminate()
-    }
+    return mPathMeasure.length
   }
 
   private fun getPhaseForProgress(progress: Float): Float = BLANK_LINE_SIZE - (progress * mStep)
@@ -276,13 +278,6 @@ class EdgeProgressBar @JvmOverloads constructor(
     mProgressPhase = targetPhase
     mProgressPaint.pathEffect = createPathEffect(mTotalLength, mProgressPhase)
     invalidate()
-  }
-
-  private fun maybeResetIndeterminate() {
-    if (mZigZagEffect.isPending()) {
-      mZigZagEffect.stop()
-      mZigZagEffect.start()
-    }
   }
 
   private fun startProgressUpdateAnimation(targetPhase: Float) {
@@ -308,5 +303,29 @@ class EdgeProgressBar @JvmOverloads constructor(
 
   private fun createPathEffect(pathLength: Float, phase: Float): DashPathEffect {
     return DashPathEffect(floatArrayOf(pathLength, pathLength), (phase * pathLength))
+  }
+
+  /**
+   * Effect contract
+   */
+
+  override fun getLineWidth(): Float {
+    return mLineWidth
+  }
+
+  override fun getColors(): IntArray {
+    return intArrayOf(progressLineColor, tintColor)
+  }
+
+  override fun getTotalLength(): Float {
+    return mTotalLength
+  }
+
+  override fun width(): Float {
+    return mWidth.toFloat()
+  }
+
+  override fun height(): Float {
+    return mHeight.toFloat()
   }
 }

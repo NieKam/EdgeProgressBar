@@ -31,7 +31,7 @@ fun Resources.getDefaultColor(): Int {
 fun Paint.initLinePaint(lineWidth : Float, color: Int) {
   this.color = color
   this.style = Paint.Style.STROKE
-  this.strokeWidth = lineWidth
+  this.strokeWidth = lineWidth.toFloat()
   this.isDither = true
   this.style = Paint.Style.STROKE
   this.strokeJoin = Paint.Join.ROUND

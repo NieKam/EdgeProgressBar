@@ -22,6 +22,7 @@
       app:indeterminate="true"
       app:line_width="8dp"
       app:progress_anim_duration="300"
+      app:indeterminate_type="zigzag"
       />
 
   <TextView
