@@ -116,6 +116,8 @@ class EdgeProgressBar @JvmOverloads constructor(
    * Init
    */
   init {
+    setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+
     val a = context.obtainStyledAttributes(attrs, R.styleable.EdgeProgressBar, defStyleAttr, 0)
 
     try {

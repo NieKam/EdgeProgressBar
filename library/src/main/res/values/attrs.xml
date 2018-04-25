@@ -12,6 +12,9 @@
     <attr name="progress_anim_duration" format="integer" />
     <attr name="indeterminate_type" format="enum">
       <enum name="zigzag" value="0" />
+      <enum name="snake" value="1" />
+      <enum name="glow" value="2" />
+      <enum name="dash" value="3" />
     </attr>
 
   </declare-styleable>
