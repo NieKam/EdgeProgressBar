@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     mEffectTypeSpinner.onItemSelectedListener = object : OnItemSelectedListener {
       override fun onItemSelected(
           parentView: AdapterView<*>,
-          selectedItemView: View,
+          selectedItemView: View?,
           position: Int,
           id: Long) {
         mEdgeProgress.setEffectType(EffectType.values()[position])
