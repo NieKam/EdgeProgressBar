@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.util.Log
 import android.view.animation.LinearInterpolator
+import com.niekam.edgeprogressbar.Constants
 import com.niekam.edgeprogressbar.indeterminate.Effect
 import com.niekam.edgeprogressbar.indeterminate.EffectContract
 import com.niekam.edgeprogressbar.initLinePaint
@@ -29,8 +30,8 @@ class ZigZagEffect : Effect {
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mPath = Path()
 
-  private var mColorPrimary: Int = Color.RED
-  private var mColorSecondary: Int = Color.BLUE
+  private var mColorPrimary: Int = Constants.DEFAULT_COLOR
+  private var mColorSecondary: Int = Constants.DEFAULT_COLOR
   private var mContract: EffectContract? = null
   private var mIndeterminateAnimation: ValueAnimator? = null
   private var mLineSegmentSize: Float = 0F

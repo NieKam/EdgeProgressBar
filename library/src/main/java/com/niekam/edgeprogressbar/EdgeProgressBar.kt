@@ -40,7 +40,6 @@ class EdgeProgressBar @JvmOverloads constructor(
   private val mTintPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
   private var mHeight = -1
-  private var mIndeterminateEffect: Effect = EffectType.values()[DEFAULT_INDETERMINATE_TYPE].effect
   private var mProgressAnimation: ValueAnimator? = null
   private var mProgressPhase = BLANK_LINE_SIZE
   private var mStep = DEFAULT_STEP
@@ -99,7 +98,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       }
     }
 
-  private var mLineWidthSavedValue : Float = 0F
+  private var mLineWidthSavedValue: Float = 0F
   private var mLineWidth: Float = 0F
   var lineWidth: Int
     get() {
@@ -111,6 +110,9 @@ class EdgeProgressBar @JvmOverloads constructor(
       mTintPaint.strokeWidth = mLineWidth
       mIndeterminateEffect.onLineWidthChange(mLineWidth)
     }
+
+  private var mIndeterminateEffect: Effect = EffectType.values()[DEFAULT_INDETERMINATE_TYPE].effect
+  private var mEffectType = EffectType.values()[DEFAULT_INDETERMINATE_TYPE]
 
   /**
    * Init
@@ -144,7 +146,8 @@ class EdgeProgressBar @JvmOverloads constructor(
       val indeterminateType = a.getInt(
           R.styleable.EdgeProgressBar_indeterminate_type,
           DEFAULT_INDETERMINATE_TYPE)
-      mIndeterminateEffect = EffectType.values()[indeterminateType].effect
+      mEffectType = EffectType.values()[indeterminateType]
+      mIndeterminateEffect = mEffectType.effect
     } finally {
       a.recycle()
     }
@@ -193,6 +196,22 @@ class EdgeProgressBar @JvmOverloads constructor(
   /**
    * Public API
    */
+  fun getEffectType(): EffectType {
+    return mEffectType
+  }
+
+  fun setEffectType(type: EffectType) {
+    mIndeterminateEffect.onDetached()
+    mEffectType = type
+    mIndeterminateEffect = mEffectType.effect
+    mIndeterminateEffect.onAttached(this)
+    mIndeterminateEffect.onMeasure()
+
+    if (mIsIndeterminate) {
+      mIndeterminateEffect.start()
+    }
+  }
+
   fun setProgress(progress: Float, animation: Boolean) {
     val normalizedProgress = progress.coerceIn(0F, max.toFloat())
     if (mIsIndeterminate || mProgress == normalizedProgress) {

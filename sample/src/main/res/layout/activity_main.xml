@@ -22,7 +22,7 @@
       app:indeterminate="true"
       app:line_width="8dp"
       app:progress_anim_duration="300"
-      app:indeterminate_type="zigzag"
+      app:indeterminate_type="snake"
       />
 
   <TextView
@@ -141,6 +141,18 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/progress_seekbar"
       style="@style/Text.Label"
+      />
+
+  <Spinner
+      android:id="@+id/effet_type_spinner"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/color_primary"
+      android:layout_marginTop="@dimen/margin_large"
+      android:layout_marginStart="@dimen/default_margin"
+      android:layout_marginBottom="@dimen/default_margin"
       />
 
 </android.support.constraint.ConstraintLayout>

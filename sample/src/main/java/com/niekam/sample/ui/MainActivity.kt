@@ -8,13 +8,20 @@ import android.support.constraint.ConstraintSet
 import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.SeekBar
+import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
 import com.niekam.edgeprogressbar.EdgeProgressBar
+import com.niekam.edgeprogressbar.indeterminate.EffectType
 import com.niekam.sample.R
 import org.xdty.preference.colorpicker.ColorPickerDialog
+import android.widget.AdapterView.OnItemSelectedListener
+
+
 
 class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
 
@@ -28,6 +35,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   private lateinit var mSecondaryColorView: View
   private lateinit var mIndeterminateSwitch: Switch
   private lateinit var mStrokeWidthSeekBar: SeekBar
+  private lateinit var mEffectTypeSpinner: Spinner
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -46,7 +54,17 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     mRootLayout = findViewById(R.id.root_layout)
     mPrimaryColorView = findViewById(R.id.color_primary)
     mSecondaryColorView = findViewById(R.id.color_secondary)
+    mEffectTypeSpinner = findViewById(R.id.effet_type_spinner)
     findViewById<Switch>(R.id.animation_switch).setOnCheckedChangeListener(mAnimationSwitchListener)
+  }
+
+  private fun initSpinner() {
+    val spinnerArray = EffectType.values().map { it.name }
+    val adapter: ArrayAdapter<String> = ArrayAdapter(
+        this, android.R.layout.simple_spinner_item, spinnerArray)
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+    mEffectTypeSpinner.adapter = adapter
+
   }
 
   private fun initValues() {
@@ -55,6 +73,9 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     mProgressText.text = "$progress"
     mIndeterminateSwitch.isChecked = mEdgeProgress.indeterminate
     mStrokeWidthSeekBar.progress = mEdgeProgress.lineWidth
+    initSpinner()
+
+    mEffectTypeSpinner.setSelection(mEdgeProgress.getEffectType().ordinal)
   }
 
   private fun initListeners() {
@@ -63,6 +84,17 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     mProgressSeekBar.setOnSeekBarChangeListener(mProgressBarChangeListener)
     mPrimaryColorView.setOnClickListener { mPresenter.onPrimaryColorClicked(mPrimaryColorView.background as ColorDrawable) }
     mSecondaryColorView.setOnClickListener { mPresenter.onSecondaryColorClicked(mPrimaryColorView.background as ColorDrawable) }
+    mEffectTypeSpinner.onItemSelectedListener = object : OnItemSelectedListener {
+      override fun onItemSelected(
+          parentView: AdapterView<*>,
+          selectedItemView: View,
+          position: Int,
+          id: Long) {
+        mEdgeProgress.setEffectType(EffectType.values()[position])
+      }
+
+      override fun onNothingSelected(parentView: AdapterView<*>) {}
+    }
   }
 
   override fun onStart() {
@@ -101,7 +133,17 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   override fun setProgressSectionVisible(isEnabled: Boolean) {
-    val visibility = if (isEnabled) View.VISIBLE else View.GONE
+    val visibility: Int
+    val spinnerVisibility: Int
+
+    if (isEnabled) {
+      spinnerVisibility = View.GONE
+      visibility = View.VISIBLE
+    } else {
+      spinnerVisibility = View.VISIBLE
+      visibility = View.GONE
+    }
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       TransitionManager.beginDelayedTransition(mRootLayout)
     }
@@ -112,6 +154,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
     set.setVisibility(R.id.progress_text, visibility)
     set.setVisibility(R.id.progress_seekbar, visibility)
     set.setVisibility(R.id.animation_switch, visibility)
+    set.setVisibility(R.id.effet_type_spinner, spinnerVisibility)
     set.applyTo(mRootLayout)
   }
 

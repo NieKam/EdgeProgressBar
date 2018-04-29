@@ -11,6 +11,7 @@ import android.graphics.Path
 import android.graphics.Shader
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
+import com.niekam.edgeprogressbar.Constants
 import com.niekam.edgeprogressbar.indeterminate.Effect
 import com.niekam.edgeprogressbar.indeterminate.EffectContract
 import com.niekam.edgeprogressbar.initLinePaint
@@ -30,7 +31,7 @@ class SnakeEffect : Effect {
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mPath = Path()
 
-  private var mColorPrimary: Int = Color.RED
+  private var mColorPrimary: Int = Constants.DEFAULT_COLOR
   private var mContract: EffectContract? = null
   private var mMoveAnimation: ValueAnimator? = null
   private var mLineSegmentSize: Float = 0F
