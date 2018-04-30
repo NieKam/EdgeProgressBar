@@ -29,7 +29,6 @@ class SnakeEffect : Effect {
   }
 
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mPath = Path()
 
   private var mColorPrimary: Int = Constants.DEFAULT_COLOR
   private var mContract: EffectContract? = null
@@ -93,8 +92,8 @@ class SnakeEffect : Effect {
     mMoveAnimation = null
   }
 
-  override fun onDraw(canvas: Canvas) {
-    canvas.drawPath(mPath, mPaint)
+  override fun onDraw(canvas: Canvas, path: Path) {
+    canvas.drawPath(path, mPaint)
   }
 
   override fun onMeasure() {
@@ -102,8 +101,6 @@ class SnakeEffect : Effect {
     val contract = mContract as EffectContract
 
     mLineSegmentSize = contract.getTotalLength() / PATH_DASH_SEGMENTS
-    mPath.reset()
-    mPath.addRect(0F, 0F, contract.width(), contract.height(), Path.Direction.CW)
     reset()
   }
 

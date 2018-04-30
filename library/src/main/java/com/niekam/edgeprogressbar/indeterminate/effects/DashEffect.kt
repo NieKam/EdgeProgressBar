@@ -24,7 +24,6 @@ class DashEffect : Effect {
 
   private val mDashPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mPath = Path()
 
   private var mColorPrimary: Int = Color.RED
   private var mColorSecondary: Int = Color.BLUE
@@ -98,9 +97,9 @@ class DashEffect : Effect {
     mIndeterminateAnimation = null
   }
 
-  override fun onDraw(canvas: Canvas) {
-    canvas.drawPath(mPath, mPaint)
-    canvas.drawPath(mPath, mDashPaint)
+  override fun onDraw(canvas: Canvas, path: Path) {
+    canvas.drawPath(path, mPaint)
+    canvas.drawPath(path, mDashPaint)
   }
 
   override fun onMeasure() {
@@ -108,8 +107,6 @@ class DashEffect : Effect {
     val contract = mContract as EffectContract
 
     mLineSegmentSize = contract.getTotalLength() / PATH_DASH_SEGMENTS
-    mPath.reset()
-    mPath.addRect(0F, 0F, contract.width(), contract.height(), Path.Direction.CW)
     reset()
   }
 

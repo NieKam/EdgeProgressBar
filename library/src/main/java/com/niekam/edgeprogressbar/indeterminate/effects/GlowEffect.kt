@@ -21,7 +21,6 @@ class GlowEffect : Effect {
   }
 
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mPath = Path()
 
   private var mContract: EffectContract? = null
   private var mGlowAnimation: ValueAnimator? = null
@@ -77,17 +76,12 @@ class GlowEffect : Effect {
     mGlowAnimation = null
   }
 
-  override fun onDraw(canvas: Canvas) {
-    canvas.drawPath(mPath, mPaint)
+  override fun onDraw(canvas: Canvas, path: Path) {
+    canvas.drawPath(path, mPaint)
   }
 
   override fun onMeasure() {
-    require(mContract != null)
-    val contract = mContract as EffectContract
-
-    mPath.reset()
-    mPath.addRect(0F, 0F, contract.width(), contract.height(), Path.Direction.CW)
-    reset()
+    // Intentionally empty
   }
 
   private fun isPending(): Boolean {

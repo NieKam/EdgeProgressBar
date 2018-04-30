@@ -3,6 +3,7 @@ package com.niekam.edgeprogressbar.indeterminate.effects
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.graphics.BlurMaskFilter
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -28,7 +29,6 @@ class ZigZagEffect : Effect {
 
   private val mDashPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-  private val mPath = Path()
 
   private var mColorPrimary: Int = Constants.DEFAULT_COLOR
   private var mColorSecondary: Int = Constants.DEFAULT_COLOR
@@ -107,9 +107,9 @@ class ZigZagEffect : Effect {
     mIndeterminateAnimation = null
   }
 
-  override fun onDraw(canvas: Canvas) {
-    canvas.drawPath(mPath, mPaint)
-    canvas.drawPath(mPath, mDashPaint)
+  override fun onDraw(canvas: Canvas, path: Path) {
+    canvas.drawPath(path, mPaint)
+    canvas.drawPath(path, mDashPaint)
   }
 
   override fun onMeasure() {
@@ -117,8 +117,6 @@ class ZigZagEffect : Effect {
     val contract = mContract as EffectContract
 
     mLineSegmentSize = contract.getTotalLength() / PATH_DASH_SEGMENTS
-    mPath.reset()
-    mPath.addRect(0F, 0F, contract.width(), contract.height(), Path.Direction.CW)
     reset()
   }
 

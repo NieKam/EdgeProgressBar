@@ -11,6 +11,7 @@ import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PathMeasure
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -35,6 +36,7 @@ class EdgeProgressBar @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr), EffectContract {
 
   private val mPathMeasure = PathMeasure()
+  private val mRect = RectF()
   private val mProgressPaint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val mProgressPath = Path()
   private val mTintPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -109,6 +111,7 @@ class EdgeProgressBar @JvmOverloads constructor(
       mProgressPaint.strokeWidth = mLineWidth
       mTintPaint.strokeWidth = mLineWidth
       mIndeterminateEffect.onLineWidthChange(mLineWidth)
+      transformPath(mWidth, mHeight)
     }
 
   private var mIndeterminateEffect: Effect = EffectType.values()[DEFAULT_INDETERMINATE_TYPE].effect
@@ -186,7 +189,7 @@ class EdgeProgressBar @JvmOverloads constructor(
     super.onDraw(canvas)
 
     if (mIsIndeterminate) {
-      mIndeterminateEffect.onDraw(canvas)
+      mIndeterminateEffect.onDraw(canvas, mProgressPath)
     } else {
       canvas.drawPath(mProgressPath, mTintPaint)
       canvas.drawPath(mProgressPath, mProgressPaint)
@@ -285,12 +288,24 @@ class EdgeProgressBar @JvmOverloads constructor(
     mHeight = height
 
     mProgressPath.reset()
-    mProgressPath.addRect(0F, 0F, width.toFloat(), height.toFloat(), Path.Direction.CW)
+    mRect.set(0F, 0F, width.toFloat(), height.toFloat())
+    val inset = adjustInset()
+    mRect.inset(inset, inset)
+    mProgressPath.addRect(mRect, Path.Direction.CW)
 
     mPathMeasure.setPath(mProgressPath, false)
     mProgressPaint.pathEffect = createPathEffect(mTotalLength, getPhaseForProgress(mProgress))
 
     return mPathMeasure.length
+  }
+
+  private fun adjustInset(): Float {
+    val maxWidth = 4.dpToPx
+    return if (mLineWidth >= maxWidth) {
+      mLineWidth / 3
+    } else {
+      0F
+    }
   }
 
   private fun getPhaseForProgress(progress: Float): Float = BLANK_LINE_SIZE - (progress * mStep)
