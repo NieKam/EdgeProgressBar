@@ -1,6 +1,10 @@
 # EdgeProgressBar
 
-[![GitHub license](https://img.shields.io/badge/License-Apache-green.svg)](https://github.com/NieKam/EdgeProgressBar/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/License-Apache-green.svg)]
+(https://github.com/NieKam/EdgeProgressBar/blob/master/LICENSE)
+
+[![Version](https://img.shields.io/badge/Version-1.0-blue.svg)]
+(https://jitpack.io/#NieKam/EdgeProgressBar/1.0.0)
 
 # Gradle Dependency
 
@@ -23,6 +27,46 @@ dependencies {
   implementation 'com.github.NieKam:EdgeProgressBar:1.0.0'
 }
 ```
+# Info
+
+EdgeProgressBar can work in two modes:
+- #### Normal progress bar
+
+This mode is default one. Progress will be drawn around the screen edges. You use following attributes:
+
+| Attribute name    | Type | Description |
+| -------------   | ------------- | -------------|
+| progress_color  |  color  | Content Cell  |
+| tint_color  | color  | Content Cell  |
+| line_width  | dimmension  | Content Cell  |
+| max  | integer  | Content Cell  |
+| start_progress  | float  | Content Cell  |
+| progress_anim_duration  | integer  | Content Cell  |
+
+- #### Indeterminate
+
+To use this mode you need to add attribute 
+
+```xml
+  indeterminate="true"
+```
+In indeterminate mode you can choose between following effects:
+
+1. ZizZag
+2. Dash
+3. Snake
+4. Glow
+
+Indeterminate progress could use following attributes:
+
+| Attribute name    | Type | Description |
+| -------------   | ------------- | -------------|
+| progress_color  |  color  | Content Cell  |
+| tint_color  | color  | Content Cell  |
+| line_width  | dimmension  | Content Cell  |
+| indeterminate  | boolean  | Content Cell  |
+| indeterminate_type  | enum  | Content Cell  |
+
 # Usage
 
 ### XML layout
@@ -50,19 +94,5 @@ dependencies {
   
   </android.support.constraint.ConstraintLayout>
 ```
-
-### Attributes
-
-| Attribute name    | Type | Description |
-| -------------   | ------------- | -------------|
-| progress_color  |  color  | Content Cell  |
-| tint_color  | color  | Content Cell  |
-| line_width  | dimmension  | Content Cell  |
-| indeterminate  | boolean  | Content Cell  |
-| max  | integer  | Content Cell  |
-| start_progress  | float  | Content Cell  |
-| progress_anim_duration  | integer  | Content Cell  |
-| indeterminate_type  | enum  | Content Cell  |
-
 
 in progress..
