@@ -32,14 +32,14 @@ EdgeProgressBar can work in two modes:
 
 This mode is default one. Progress will be drawn around the screen edges. You use following attributes:
 
-| Attribute name    | Type | Description |
-| -------------   | ------------- | -------------|
-| progress_color  |  color  | Content Cell  |
-| tint_color  | color  | Content Cell  |
-| line_width  | dimmension  | Content Cell  |
-| max  | integer  | Content Cell  |
-| start_progress  | float  | Content Cell  |
-| progress_anim_duration  | integer  | Content Cell  |
+| Attribute name    | Type |
+| -------------   | ------------- |
+| progress_color  |  color  |
+| tint_color  | color  |
+| line_width  | dimmension  |
+| max  | integer  |
+| start_progress  | float  |
+| progress_anim_duration  | integer  |
 
 
 <img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/Screenshot_1526048947.png" width="25%" height="25%">
@@ -75,13 +75,13 @@ In indeterminate mode you can choose between following effects:
 
 Indeterminate progress could use following attributes:
 
-| Attribute name    | Type | Description |
-| -------------   | ------------- | -------------|
-| progress_color  |  color  | Content Cell  |
-| tint_color  | color  | Content Cell  |
-| line_width  | dimmension  | Content Cell  |
-| indeterminate  | boolean  | Content Cell  |
-| indeterminate_type  | enum  | Content Cell  |
+| Attribute name    | Type |
+| -------------   | ------------- | 
+| progress_color  |  color  | 
+| tint_color  | color  | 
+| line_width  | dimmension  | 
+| indeterminate  | boolean  | 
+| indeterminate_type  | enum  | 
 
 # Usage
 
@@ -110,5 +110,3 @@ Indeterminate progress could use following attributes:
   
   </android.support.constraint.ConstraintLayout>
 ```
-
-in progress..
