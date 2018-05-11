@@ -41,19 +41,29 @@ This mode is default one. Progress will be drawn around the screen edges. You us
 | start_progress  | float  | Content Cell  |
 | progress_anim_duration  | integer  | Content Cell  |
 
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/Screenshot_1526048947.png" width="25%" height="25%">
+
+
+`progress_color` is orange 
+`tint_color` is yellow
+
 - #### Indeterminate
 
 To use this mode you need to add attribute 
 
-```xml
-  indeterminate="true"
-```
+`indeterminate="true"`
+
 In indeterminate mode you can choose between following effects:
 
 1. ZizZag
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/zigzag.gif" width="25%" height="25%">
 2. Dash
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/dash.gif" width="25%" height="25%">
 3. Snake
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/snake.gif" width="25%" height="25%">
 4. Glow
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/glow.gif" width="25%" height="25%">
 
 Indeterminate progress could use following attributes:
 
