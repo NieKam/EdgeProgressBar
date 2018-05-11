@@ -1,4 +1,4 @@
 <resources>
-  <string name="app_name">Sample</string>
+  <string name="app_name">EdgeProgressBar Sample</string>
   <string name="choose_colors">Choose Color</string>
 </resources>

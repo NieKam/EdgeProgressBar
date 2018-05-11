@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#3F51B5</color>
-  <color name="colorPrimaryDark">#303F9F</color>
-  <color name="colorAccent">#FF4081</color>
+  <color name="colorPrimary">@color/md_black_1000</color>
+  <color name="colorPrimaryDark">@color/md_black_1000</color>
+  <color name="colorAccent">@color/md_blue_grey_300</color>
 
-  <color name="primary_progress_color">@color/md_orange_600</color>
-  <color name="secondary_progress_color">@color/md_green_400</color>
+  <color name="primary_progress_color">@color/md_pink_A100</color>
+  <color name="secondary_progress_color">@color/md_cyan_300</color>
 
   <array name="rainbow">
     <item>@color/md_pink_500</item>
