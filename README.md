@@ -1,10 +1,8 @@
 # EdgeProgressBar
 
-[![GitHub license](https://img.shields.io/badge/License-Apache-green.svg)]
-(https://github.com/NieKam/EdgeProgressBar/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/License-Apache-green.svg)](https://github.com/NieKam/EdgeProgressBar/blob/master/LICENSE)
 
-[![Version](https://img.shields.io/badge/Version-1.0-blue.svg)]
-(https://jitpack.io/#NieKam/EdgeProgressBar/1.0.0)
+[![Version](https://img.shields.io/badge/Version-1.0-blue.svg)](https://jitpack.io/#NieKam/EdgeProgressBar/1.0.0)
 
 # Gradle Dependency
 
