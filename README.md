@@ -83,6 +83,10 @@ Indeterminate progress could use following attributes:
 | indeterminate  | boolean  | 
 | indeterminate_type  | enum  | 
 
+Check sample app to find how use progress bar in full screen:
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/full_screen.gif" width="25%" height="25%">
+
 # Usage
 
 ### XML layout
