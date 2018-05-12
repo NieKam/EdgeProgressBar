@@ -3,4 +3,5 @@
   <dimen name="default_margin">16dp</dimen>
   <dimen name="small_margin">4dp</dimen>
   <dimen name="margin_large">24dp</dimen>
+  <dimen name="progress_bar_translation">10dp</dimen>
 </resources>
