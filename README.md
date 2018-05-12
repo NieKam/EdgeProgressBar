@@ -116,3 +116,6 @@ Check sample app to find how use progress bar in full screen:
   
   </android.support.constraint.ConstraintLayout>
 ```
+
+## PS
+Feel free to send your sugestions. Next step is to make better indeterminate effects.
