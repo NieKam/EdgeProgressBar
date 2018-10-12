@@ -69,10 +69,10 @@ class EdgeProgress @JvmOverloads constructor(
     try {
       mIsIndeterminate = a.getBoolean(R.styleable.EdgeProgress_indeterminate, mIsIndeterminate)
       mFirstColor = a.getColor(
-          R.styleable.EdgeProgress_progress_color,
+          R.styleable.EdgeProgress_first_color,
           context.resources.getDefaultColor())
       mSecondaryColor = a.getColor(
-          R.styleable.EdgeProgress_tint_color,
+          R.styleable.EdgeProgress_second_color,
           Color.TRANSPARENT)
       mLineWidth = a.getDimension(
           R.styleable.EdgeProgress_line_width,

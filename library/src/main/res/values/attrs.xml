@@ -3,8 +3,8 @@
 
   <declare-styleable name="EdgeProgress">
 
-    <attr name="progress_color" format="color" />
-    <attr name="tint_color" format="color" />
+    <attr name="first_color" format="color" />
+    <attr name="second_color" format="color" />
     <attr name="line_width" format="dimension" />
     <attr name="indeterminate" format="boolean" />
     <attr name="max" format="integer" />
@@ -13,8 +13,6 @@
     <attr name="indeterminate_type" format="enum">
       <enum name="zigzag" value="0" />
       <enum name="snake" value="1" />
-      <enum name="glow" value="2" />
-      <enum name="dash" value="3" />
     </attr>
 
   </declare-styleable>

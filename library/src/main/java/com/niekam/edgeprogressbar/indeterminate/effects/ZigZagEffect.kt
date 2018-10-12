@@ -38,6 +38,7 @@ class ZigZagEffect : Effect {
       mContract = it
       mPaint.initLinePaint(it.getLineWidthInPx(), it.getFirstColor())
       mDashPaint.initLinePaint(it.getLineWidthInPx(), it.getSecondaryColor())
+      mPaint.shader = getShader(it.getFirstColor(), it.getSecondaryColor())
     }
 
     start()
@@ -92,7 +93,7 @@ class ZigZagEffect : Effect {
     mIndeterminateAnimation?.start()
 
     val argbEvaluator = ArgbEvaluator()
-    mDashPaint.color = argbEvaluator.evaluate(.65F, contract.getFirstColor(), contract.getSecondaryColor()) as Int
+    mDashPaint.color = argbEvaluator.evaluate(.55F, contract.getFirstColor(), contract.getSecondaryColor()) as Int
   }
 
   private fun stop() {
