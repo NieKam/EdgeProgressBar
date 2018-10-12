@@ -24,7 +24,7 @@ class ZigZagEffect : Effect {
     const val TAG = "ZigZag"
     const val PATH_DASH_SEGMENTS = 6
     const val DASH_LINE_COUNT = 2
-    const val INDETERMINATE_ANIMATION_DURATION_MS = 4000L
+    const val INDETERMINATE_ANIMATION_DURATION_MS = 5000L
   }
 
   private val mDashPaint = Paint(Paint.ANTI_ALIAS_FLAG)
