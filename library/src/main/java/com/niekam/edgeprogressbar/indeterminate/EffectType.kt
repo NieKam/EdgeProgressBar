@@ -1,7 +1,5 @@
 package com.niekam.edgeprogressbar.indeterminate
 
-import com.niekam.edgeprogressbar.indeterminate.effects.DashEffect
-import com.niekam.edgeprogressbar.indeterminate.effects.GlowEffect
 import com.niekam.edgeprogressbar.indeterminate.effects.SnakeEffect
 import com.niekam.edgeprogressbar.indeterminate.effects.ZigZagEffect
 
@@ -10,9 +8,6 @@ import com.niekam.edgeprogressbar.indeterminate.effects.ZigZagEffect
  */
 enum class EffectType(indeterminateEffect: Effect) {
   ZIGZAG(ZigZagEffect()),
-  SNAKE(SnakeEffect()),
-  GLOW(GlowEffect()),
-  DASH(DashEffect());
-
+  SNAKE(SnakeEffect());
   val effect = indeterminateEffect
 }

@@ -9,11 +9,10 @@ import android.graphics.Path
 interface Effect {
 
   fun onAttached(contract: EffectContract)
-  fun onColorsChange(colors: IntArray)
   fun onDetached()
+  fun onPrimaryColorChange(color: Int)
+  fun onSecondaryColorChange(color: Int)
   fun onDraw(canvas: Canvas, path: Path)
   fun onLineWidthChange(width: Float)
   fun onMeasure()
-  fun start()
-  fun stop()
 }

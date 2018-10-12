@@ -3,7 +3,6 @@ package com.niekam.edgeprogressbar.indeterminate.effects
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
@@ -11,7 +10,7 @@ import android.graphics.Path
 import android.graphics.Shader
 import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
-import com.niekam.edgeprogressbar.Constants
+import com.niekam.edgeprogressbar.Constants.END_GRADIENT
 import com.niekam.edgeprogressbar.indeterminate.Effect
 import com.niekam.edgeprogressbar.indeterminate.EffectContract
 import com.niekam.edgeprogressbar.initLinePaint
@@ -25,21 +24,18 @@ class SnakeEffect : Effect {
     const val TAG = "Snake"
     const val PATH_DASH_SEGMENTS = 2
     const val MOVE_ANIMATION_DURATION_MS = 2400L
-    const val END_GRADIENT = 200F
   }
 
   private val mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-
-  private var mColorPrimary: Int = Constants.DEFAULT_COLOR
   private var mContract: EffectContract? = null
   private var mMoveAnimation: ValueAnimator? = null
   private var mLineSegmentSize: Float = 0F
 
   override fun onAttached(contract: EffectContract) {
     mContract = contract
-    mColorPrimary = contract.getColors()[0]
-    mPaint.initLinePaint(contract.getLineWidth(), mColorPrimary)
-    mPaint.shader = getShader(contract.getColors())
+    mPaint.initLinePaint(contract.getLineWidthInPx(), contract.getFirstColor())
+    mPaint.shader = getShader(contract.getFirstColor(), contract.getSecondaryColor())
+    start()
   }
 
   override fun onDetached() {
@@ -51,13 +47,22 @@ class SnakeEffect : Effect {
     mPaint.strokeWidth = width
   }
 
-  override fun onColorsChange(colors: IntArray) {
-    mColorPrimary = colors[0]
-    mPaint.shader = getShader(colors)
+  override fun onPrimaryColorChange(color: Int) {
+    mContract?.let {
+      mPaint.shader = getShader(color, it.getSecondaryColor())
+    }
     reset()
   }
 
-  override fun start() {
+  override fun onSecondaryColorChange(color: Int) {
+    mContract?.let {
+      mPaint.shader = getShader(it.getFirstColor(), color)
+    }
+    reset()
+  }
+
+
+  private fun start() {
     require(mContract != null)
     val contract = mContract as EffectContract
 
@@ -66,7 +71,7 @@ class SnakeEffect : Effect {
       return
     }
 
-    mMoveAnimation = ObjectAnimator.ofFloat((contract.getTotalLength() * PATH_DASH_SEGMENTS), 0F)
+    mMoveAnimation = ObjectAnimator.ofFloat((contract.getTotalLineLength() * PATH_DASH_SEGMENTS), 0F)
     mMoveAnimation?.repeatCount = ValueAnimator.INFINITE
     mMoveAnimation?.duration = MOVE_ANIMATION_DURATION_MS
     mMoveAnimation?.interpolator = AccelerateDecelerateInterpolator()
@@ -74,15 +79,15 @@ class SnakeEffect : Effect {
       mPaint.pathEffect = DashPathEffect(
           floatArrayOf(mLineSegmentSize, mLineSegmentSize),
           it.animatedValue as Float)
-      mContract?.invalidate()
+      mContract?.requestInvalidate()
     }
 
     mMoveAnimation?.start()
 
-    mPaint.color = mColorPrimary
+    mPaint.color = contract.getFirstColor()
   }
 
-  override fun stop() {
+  private fun stop() {
     if (!isPending()) {
       Log.e(TAG, "Indeterminate animation already stopped. Exit")
       return
@@ -97,10 +102,9 @@ class SnakeEffect : Effect {
   }
 
   override fun onMeasure() {
-    require(mContract != null)
-    val contract = mContract as EffectContract
-
-    mLineSegmentSize = contract.getTotalLength() / PATH_DASH_SEGMENTS
+    mContract?.let {
+      mLineSegmentSize = it.getTotalLineLength() / PATH_DASH_SEGMENTS
+    }
     reset()
   }
 
@@ -109,14 +113,14 @@ class SnakeEffect : Effect {
     return anim.isRunning
   }
 
-  private fun getShader(colors: IntArray): LinearGradient {
+  private fun getShader(color1: Int, color2: Int): LinearGradient {
     return LinearGradient(
         0F,
         0F,
         END_GRADIENT,
         END_GRADIENT,
-        colors[0],
-        colors[1],
+        color1,
+        color2,
         Shader.TileMode.MIRROR)
   }
 

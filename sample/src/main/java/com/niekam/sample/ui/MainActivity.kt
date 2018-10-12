@@ -9,25 +9,24 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.view.View
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.CompoundButton
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.Switch
 import android.widget.TextView
-import com.niekam.edgeprogressbar.EdgeProgressBar
+import com.niekam.edgeprogressbar.EdgeProgress
 import com.niekam.edgeprogressbar.indeterminate.EffectType
 import com.niekam.sample.R
 import org.xdty.preference.colorpicker.ColorPickerDialog
-import android.widget.AdapterView.OnItemSelectedListener
-
 
 
 class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
 
   private val mPresenter = MainPresenter()
 
-  private lateinit var mEdgeProgress: EdgeProgressBar
+  private lateinit var mEdgeProgress: EdgeProgress
   private lateinit var mProgressText: TextView
   private lateinit var mProgressSeekBar: SeekBar
   private lateinit var mRootLayout: ConstraintLayout
@@ -68,14 +67,16 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   private fun initValues() {
-    val progress = mEdgeProgress.progress
+    val progress = mEdgeProgress.getProgress()
     mProgressSeekBar.progress = progress.toInt()
     mProgressText.text = "$progress"
-    mIndeterminateSwitch.isChecked = mEdgeProgress.indeterminate
-    mStrokeWidthSeekBar.progress = mEdgeProgress.lineWidth
+    mIndeterminateSwitch.isChecked = mEdgeProgress.isIndeterminate()
+    mStrokeWidthSeekBar.progress = mEdgeProgress.getLineWidth()
     initSpinner()
 
-    mEffectTypeSpinner.setSelection(mEdgeProgress.getEffectType().ordinal)
+    if (mEdgeProgress.isIndeterminate()) {
+      mEffectTypeSpinner.setSelection(mEdgeProgress.getEffectType()!!.ordinal)
+    }
   }
 
   private fun initListeners() {
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
           selectedItemView: View?,
           position: Int,
           id: Long) {
-        mEdgeProgress.setEffectType(EffectType.values()[position])
+        mEdgeProgress.setEffect(EffectType.values()[position])
       }
 
       override fun onNothingSelected(parentView: AdapterView<*>) {}
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   override fun isIndeterminate(): Boolean {
-    return mEdgeProgress.indeterminate
+    return mEdgeProgress.isIndeterminate()
   }
 
   override fun getProgressValue(): Int = mProgressSeekBar.progress
@@ -118,18 +119,12 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
   }
 
   override fun setMaxProgress(max: Int) {
-    mEdgeProgress.max = max
+    mEdgeProgress.setMax(max)
     mProgressSeekBar.max = max
   }
 
   override fun setEdgeProgress(progress: Int, withAnimation: Boolean) {
-    // I could call mEdgeProgress.setProgress(progress.toFloat(), withAnimation)
-    // but I want to show how you can set progress in kotlin.
-    if (withAnimation) {
-      mEdgeProgress.setProgress(progress.toFloat(), true)
-    } else {
-      mEdgeProgress.progress = progress.toFloat()
-    }
+    mEdgeProgress.setProgress(progress.toFloat(), withAnimation)
   }
 
   override fun setProgressSectionVisible(isEnabled: Boolean) {
@@ -148,28 +143,29 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
       TransitionManager.beginDelayedTransition(mRootLayout)
     }
 
-    val set = ConstraintSet()
-    set.clone(mRootLayout)
-    set.setVisibility(R.id.section_title_progress, visibility)
-    set.setVisibility(R.id.progress_text, visibility)
-    set.setVisibility(R.id.progress_seekbar, visibility)
-    set.setVisibility(R.id.animation_switch, visibility)
-    set.setVisibility(R.id.effet_type_spinner, spinnerVisibility)
-    set.applyTo(mRootLayout)
+    ConstraintSet().apply {
+      clone(mRootLayout)
+      setVisibility(R.id.section_title_progress, visibility)
+      setVisibility(R.id.progress_text, visibility)
+      setVisibility(R.id.progress_seekbar, visibility)
+      setVisibility(R.id.animation_switch, visibility)
+      setVisibility(R.id.effet_type_spinner, spinnerVisibility)
+      applyTo(mRootLayout)
+    }
   }
 
   override fun setIndeterminate(isIndeterminate: Boolean) {
-    mEdgeProgress.indeterminate = isIndeterminate
+    mEdgeProgress.setIndeterminate(isIndeterminate)
   }
 
   override fun setPrimaryColor(color: Int) {
     mPrimaryColorView.setBackgroundColor(color)
-    mEdgeProgress.progressLineColor = color
+    mEdgeProgress.setFirstColor(color)
   }
 
   override fun setSecondaryColor(color: Int) {
     mSecondaryColorView.setBackgroundColor(color)
-    mEdgeProgress.tintColor = color
+    mEdgeProgress.setSecondColor(color)
   }
 
   override fun showDialog(dialog: ColorPickerDialog) {
@@ -196,7 +192,7 @@ class MainActivity : AppCompatActivity(), MainPresenter.ViewContract {
 
   private val mStrokeWidthChangeListener = object : SeekBar.OnSeekBarChangeListener {
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-      mEdgeProgress.lineWidth = progress
+      mEdgeProgress.setLineWidth(progress)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {

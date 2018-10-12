@@ -34,10 +34,11 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
     super.onViewAttached()
     require(view != null) { "View cannot be null" }
 
-    val viewContract = view as ViewContract
-    viewContract.setProgressText(viewContract.getProgressValue().toString())
-    viewContract.setMaxProgress(MAX)
-    viewContract.setProgressSectionVisible(!viewContract.isIndeterminate())
+    view?.let {
+      it.setProgressText(it.getProgressValue().toString())
+      it.setMaxProgress(MAX)
+      it.setProgressSectionVisible(!it.isIndeterminate())
+    }
   }
 
   fun onProgressChanged(progress: Int) {
@@ -46,13 +47,17 @@ class MainPresenter : BaseViewPresenter<MainPresenter.ViewContract>() {
     }
 
     mProgress = progress
-    view?.setProgressText(progress.toString())
-    view?.setEdgeProgress(progress, mIsAnimationEnabled)
+    view?.let {
+      it.setProgressText(progress.toString())
+      it.setEdgeProgress(progress, mIsAnimationEnabled)
+    }
   }
 
   fun onIndeterminateSwitchChecked(isChecked: Boolean) {
-    view?.setProgressSectionVisible(!isChecked)
-    view?.setIndeterminate(isChecked)
+    view?.let {
+      it.setProgressSectionVisible(!isChecked)
+      it.setIndeterminate(isChecked)
+    }
   }
 
   fun onAnimationSwitchChecked(isChecked: Boolean) {
