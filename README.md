@@ -79,7 +79,7 @@ Indeterminate progress could use following attributes:
 
 Check sample app to find how use progress bar in full screen:
 
-<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/full_screen.gif" width="25%" height="25%">
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/demo.gif" width="25%" height="25%">
 
 # Usage
 
