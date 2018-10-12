@@ -96,7 +96,7 @@ Check sample app to find how use progress bar in full screen:
     >
   ...
   
-  <com.niekam.edgeprogressbar.EdgeProgressBar
+  <com.niekam.edgeprogressbar.EdgeProgress
       android:id="@+id/edgeProgress"
       android:layout_width="0dp"
       android:layout_height="0dp"
