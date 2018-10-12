@@ -4,6 +4,8 @@
 
 [![Version](https://img.shields.io/badge/Version-1.0-blue.svg)](https://jitpack.io/#NieKam/EdgeProgressBar/1.0.0)
 
+<a href='https://play.google.com/store/apps/details?id=com.niekam.sample&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="50%" height="50%"></a>
+
 # Gradle Dependency
 
 ### Repository
@@ -32,38 +34,60 @@ EdgeProgressBar can work in two modes:
 
 This mode is default one. Progress will be drawn around the screen edges. You use following attributes:
 
-| Attribute name    | Type | Description |
-| -------------   | ------------- | -------------|
-| progress_color  |  color  | Content Cell  |
-| tint_color  | color  | Content Cell  |
-| line_width  | dimmension  | Content Cell  |
-| max  | integer  | Content Cell  |
-| start_progress  | float  | Content Cell  |
-| progress_anim_duration  | integer  | Content Cell  |
+| Attribute name    | Type |
+| -------------   | ------------- |
+| progress_color  |  color  |
+| tint_color  | color  |
+| line_width  | dimmension  |
+| max  | integer  |
+| start_progress  | float  |
+| progress_anim_duration  | integer  |
+
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/Screenshot_1526048947.png" width="25%" height="25%">
+
+
+`progress_color` is orange 
+`tint_color` is yellow
 
 - #### Indeterminate
 
 To use this mode you need to add attribute 
 
-```xml
-  indeterminate="true"
-```
+`indeterminate="true"`
+
 In indeterminate mode you can choose between following effects:
 
 1. ZizZag
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/zigzag.gif" width="25%" height="25%">
+
 2. Dash
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/dash.gif" width="25%" height="25%">
+
 3. Snake
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/snake.gif" width="25%" height="25%">
+
 4. Glow
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/glow.gif" width="25%" height="25%">
+
 
 Indeterminate progress could use following attributes:
 
-| Attribute name    | Type | Description |
-| -------------   | ------------- | -------------|
-| progress_color  |  color  | Content Cell  |
-| tint_color  | color  | Content Cell  |
-| line_width  | dimmension  | Content Cell  |
-| indeterminate  | boolean  | Content Cell  |
-| indeterminate_type  | enum  | Content Cell  |
+| Attribute name    | Type |
+| -------------   | ------------- | 
+| progress_color  |  color  | 
+| tint_color  | color  | 
+| line_width  | dimmension  | 
+| indeterminate  | boolean  | 
+| indeterminate_type  | enum  | 
+
+Check sample app to find how use progress bar in full screen:
+
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/full_screen.gif" width="25%" height="25%">
 
 # Usage
 
@@ -93,4 +117,5 @@ Indeterminate progress could use following attributes:
   </android.support.constraint.ConstraintLayout>
 ```
 
-in progress..
+## PS
+Feel free to send your sugestions. Next step is to make better indeterminate effects.
