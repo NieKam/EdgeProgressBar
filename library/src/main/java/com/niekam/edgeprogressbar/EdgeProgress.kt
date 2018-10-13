@@ -33,7 +33,7 @@ import com.niekam.edgeprogressbar.indeterminate.EffectType
 
 class EdgeProgress @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr), EffectContract, EdgeProgressApi {
+) : View(context, attrs, defStyleAttr), EffectContract {
 
   private val mPathMeasure = PathMeasure()
   private val mRect = RectF()
@@ -139,17 +139,17 @@ class EdgeProgress @JvmOverloads constructor(
   }
 
   /**
-   * EdgeProgress
+   * EdgeProgress API
    */
 
-  override fun setFirstColor(color: Int) {
+  fun setFirstColor(color: Int) {
     mFirstColor = color
     mProgressPaint.color = mFirstColor
     mIndeterminateEffect?.onPrimaryColorChange(mFirstColor)
     invalidate()
   }
 
-  override fun setSecondColor(color: Int) {
+  fun setSecondColor(color: Int) {
     mSecondaryColor = color
 
     mTintPaint.color = mSecondaryColor
@@ -158,7 +158,7 @@ class EdgeProgress @JvmOverloads constructor(
     invalidate()
   }
 
-  override fun setLineWidth(width: Int) {
+  fun setLineWidth(width: Int) {
     mLineWidth = width.dpToPx
 
     mProgressPaint.strokeWidth = mLineWidth
@@ -168,20 +168,20 @@ class EdgeProgress @JvmOverloads constructor(
     invalidate()
   }
 
-  override fun getLineWidth(): Int {
+  fun getLineWidth(): Int {
     return mLineWidth.pxToDp
   }
 
-  override fun setMax(max: Int) {
+  fun setMax(max: Int) {
     mMaxProgress = max
     mStep = BLANK_LINE_SIZE / max
   }
 
-  override fun getProgress(): Float {
+  fun getProgress(): Float {
     return mCurrentProgress
   }
 
-  override fun setProgress(progress: Float, animate: Boolean) {
+  fun setProgress(progress: Float, animate: Boolean) {
     mAnimateProgressChange = animate
     val normalizedProgress = progress.coerceIn(0F, mMaxProgress.toFloat())
     if (mIsIndeterminate || mCurrentProgress == normalizedProgress) {
@@ -197,11 +197,11 @@ class EdgeProgress @JvmOverloads constructor(
     }
   }
 
-  override fun setProgressAnimationDuration(duration: Long) {
+  fun setProgressAnimationDuration(duration: Long) {
     mProgressAnimationDuration = duration
   }
 
-  override fun setIndeterminate(isIndeterminate: Boolean) {
+  fun setIndeterminate(isIndeterminate: Boolean) {
     mIsIndeterminate = isIndeterminate
 
     requireNotNull(mIndeterminateEffect) { "Effect not set. Please set indeterminate effect before calling this method" }
@@ -214,11 +214,11 @@ class EdgeProgress @JvmOverloads constructor(
     }
   }
 
-  override fun isIndeterminate(): Boolean {
+  fun isIndeterminate(): Boolean {
     return mIsIndeterminate
   }
 
-  override fun setEffect(effect: EffectType) {
+  fun setEffect(effect: EffectType) {
     mIndeterminateEffect?.onDetached()
 
     mEffectType = effect
@@ -230,11 +230,11 @@ class EdgeProgress @JvmOverloads constructor(
     }
   }
 
-  override fun getEffectType(): EffectType? {
+  fun getEffectType(): EffectType? {
     return mEffectType
   }
 
-  override fun hide() {
+  fun hide() {
     if (visibility == GONE) {
       return
     }
@@ -260,7 +260,7 @@ class EdgeProgress @JvmOverloads constructor(
     }
   }
 
-  override fun show() {
+  fun show() {
     if (visibility == VISIBLE) {
       return
     }
@@ -327,7 +327,9 @@ class EdgeProgress @JvmOverloads constructor(
     mProgressPath.addRect(mRect, Path.Direction.CW)
 
     mPathMeasure.setPath(mProgressPath, false)
-    mProgressPaint.pathEffect = createPathEffect(mTotalLength, getPhaseForProgress(mCurrentProgress))
+    mProgressPaint.pathEffect = createPathEffect(
+        mTotalLength,
+        getPhaseForProgress(mCurrentProgress))
 
     return mPathMeasure.length
   }
