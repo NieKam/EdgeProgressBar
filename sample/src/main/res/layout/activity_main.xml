@@ -1,160 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
-    android:id="@+id/root_layout"
-    >
+    tools:context=".ui.MainActivity">
 
-  <com.niekam.edgeprogressbar.EdgeProgress
-      android:id="@+id/edgeProgress"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:first_color="@color/primary_progress_color"
-      app:second_color="@color/secondary_progress_color"
-      app:indeterminate="true"
-      app:line_width="6dp"
-      app:progress_anim_duration="300"
-      app:indeterminate_type="zigzag"
-      />
+    <com.niekam.edgeprogressbar.EdgeProgress
+        android:id="@+id/main_edgeProgressView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:first_color="@color/primary_progress_color"
+        app:indeterminate="true"
+        app:indeterminate_type="zigzag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:line_width="6dp"
+        app:progress_anim_duration="300"
+        app:second_color="@color/secondary_progress_color" />
 
-  <TextView
-      android:id="@+id/section_title_style"
-      android:text="Style"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      android:layout_margin="@dimen/default_margin"
-      style="@style/Text.Section"
-      />
+    <TextView
+        android:id="@+id/main_sectionStyleText"
+        style="@style/Text.Section"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Style"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-  <Switch
-      android:id="@+id/indeterminate_switch"
-      android:text="Indeterminate"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/section_title_style"
-      style="@style/Text.Label"
-      />
+    <Switch
+        android:id="@+id/main_indeterminateSwitch"
+        style="@style/Text.Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Indeterminate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_sectionStyleText" />
 
-  <TextView
-      android:id="@+id/stroke_width_label"
-      android:text="Line width"
-      app:layout_constraintTop_toBottomOf="@id/indeterminate_switch"
-      app:layout_constraintStart_toStartOf="parent"
-      android:layout_margin="@dimen/default_margin"
-      style="@style/Text.Label"
-      />
+    <TextView
+        android:id="@+id/main_strokeWidthLabel"
+        style="@style/Text.Label"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Line width"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_indeterminateSwitch" />
 
-  <SeekBar
-      android:id="@+id/stroke_width_seekbar"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintStart_toEndOf="@id/stroke_width_label"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@id/stroke_width_label"
-      app:layout_constraintBottom_toBottomOf="@id/stroke_width_label"
-      android:max="30"
-      />
+    <SeekBar
+        android:id="@+id/main_strokeWidthSeekbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:max="30"
+        app:layout_constraintBottom_toBottomOf="@id/main_strokeWidthLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_strokeWidthLabel"
+        app:layout_constraintTop_toTopOf="@id/main_strokeWidthLabel" />
 
+    <TextView
+        android:id="@+id/main_cornerRadiusLabel"
+        style="@style/Text.Label"
+        android:layout_margin="@dimen/default_margin"
+        android:text="Corner radius"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_strokeWidthSeekbar" />
 
-  <TextView
-      android:id="@+id/section_title_colors"
-      android:text="Colors"
-      app:layout_constraintTop_toBottomOf="@id/stroke_width_seekbar"
-      app:layout_constraintStart_toStartOf="parent"
-      android:layout_marginTop="@dimen/margin_large"
-      android:layout_marginStart="@dimen/default_margin"
-      android:layout_marginBottom="@dimen/default_margin"
-      style="@style/Text.Section"
-      />
+    <SeekBar
+        android:id="@+id/main_cornerRadiusSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:max="180"
+        app:layout_constraintBottom_toBottomOf="@id/main_cornerRadiusLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/main_cornerRadiusLabel"
+        app:layout_constraintTop_toTopOf="@id/main_cornerRadiusLabel" />
 
-  <TextView
-      android:id="@+id/color_primary"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@color/primary_progress_color"
-      android:text="Primary Color"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintTop_toBottomOf="@id/section_title_colors"
-      app:layout_constraintStart_toStartOf="parent"
-      android:padding="@dimen/small_margin"
-      style="@style/Text.Label"
-      />
+    <TextView
+        android:id="@+id/main_sectionColorText"
+        style="@style/Text.Section"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:text="Colors"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_cornerRadiusSeekBar" />
 
-  <TextView
-      android:id="@+id/color_secondary"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@color/secondary_progress_color"
-      android:text="Secondary Color"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintTop_toBottomOf="@id/section_title_colors"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:padding="@dimen/small_margin"
-      style="@style/Text.Label"
-      />
+    <TextView
+        android:id="@+id/main_primaryColorTextView"
+        style="@style/Text.Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:background="@color/primary_progress_color"
+        android:padding="@dimen/small_margin"
+        android:text="Primary Color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_sectionColorText" />
 
-  <TextView
-      android:id="@+id/section_title_progress"
-      android:text="Progress"
-      app:layout_constraintTop_toBottomOf="@id/color_primary"
-      app:layout_constraintStart_toStartOf="parent"
-      android:layout_marginTop="@dimen/margin_large"
-      android:layout_marginStart="@dimen/default_margin"
-      android:layout_marginBottom="@dimen/default_margin"
-      style="@style/Text.Section"
-      />
+    <TextView
+        android:id="@+id/main_secondaryColorTextView"
+        style="@style/Text.Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:background="@color/secondary_progress_color"
+        android:padding="@dimen/small_margin"
+        android:text="Secondary Color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_sectionColorText" />
 
-  <TextView
-      android:id="@+id/progress_text"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/section_title_progress"
-      style="@style/Text.Label"
-      />
+    <TextView
+        android:id="@+id/main_sectionProgress"
+        style="@style/Text.Section"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:text="Progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_primaryColorTextView" />
 
-  <SeekBar
-      android:id="@+id/progress_seekbar"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/progress_text"
-      android:progress="0"
-      />
+    <TextView
+        android:id="@+id/main_progressTextView"
+        style="@style/Text.Label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_sectionProgress" />
 
-  <Switch
-      android:id="@+id/animation_switch"
-      android:text="With animations"
-      android:layout_margin="@dimen/default_margin"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/progress_seekbar"
-      style="@style/Text.Label"
-      />
+    <SeekBar
+        android:id="@+id/main_progressSeekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:progress="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_progressTextView" />
 
-  <Spinner
-      android:id="@+id/effet_type_spinner"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/color_primary"
-      android:layout_marginTop="@dimen/margin_large"
-      android:layout_marginStart="@dimen/default_margin"
-      android:layout_marginBottom="@dimen/default_margin"
-      />
+    <Switch
+        android:id="@+id/main_animationSwitch"
+        style="@style/Text.Label"
+        android:layout_margin="@dimen/default_margin"
+        android:text="With animations"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_progressSeekBar" />
 
-</android.support.constraint.ConstraintLayout>
+    <Spinner
+        android:id="@+id/main_effectTypeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/default_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_primaryColorTextView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

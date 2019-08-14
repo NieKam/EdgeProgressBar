@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="default_stroke_width">5dp</dimen>
-  <color name="default_stroke_color">#03A9F4</color>
+    <dimen name="default_stroke_width">5dp</dimen>
+    <color name="default_stroke_color">#03A9F4</color>
 </resources>

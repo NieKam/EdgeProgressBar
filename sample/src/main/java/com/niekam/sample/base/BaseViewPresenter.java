@@ -1,33 +1,34 @@
 package com.niekam.sample.base;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public abstract class BaseViewPresenter<V> {
 
-  private @Nullable V mView;
+    private @Nullable
+    V mView;
 
-  public final void attachView(V view) {
-    if (view == null) {
-      return;
+    public final void attachView(V view) {
+        if (view == null) {
+            return;
+        }
+
+        mView = view;
+        onViewAttached();
     }
 
-    mView = view;
-    onViewAttached();
-  }
+    protected void onViewAttached() {
+    }
 
-  protected void onViewAttached() {
-  }
+    public final void detachView() {
+        onViewDetached();
+        mView = null;
+    }
 
-  public final void detachView() {
-    onViewDetached();
-    mView = null;
-  }
+    protected void onViewDetached() {
+    }
 
-  protected void onViewDetached() {
-  }
-
-  public @Nullable
-  V getView() {
-    return mView;
-  }
+    public @Nullable
+    V getView() {
+        return mView;
+    }
 }
