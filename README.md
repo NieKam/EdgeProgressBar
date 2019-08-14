@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/License-Apache-green.svg)](https://github.com/NieKam/EdgeProgressBar/blob/master/LICENSE)
 
-[![Version](https://img.shields.io/badge/Version-1.0.1-blue.svg)](https://jitpack.io/#NieKam/EdgeProgressBar/1.0.1)
+[![Version](https://img.shields.io/badge/Version-1.0.2-blue.svg)](https://jitpack.io/#NieKam/EdgeProgressBar/1.0.2)
 
 <a href='https://play.google.com/store/apps/details?id=com.niekam.sample&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="50%" height="50%"></a>
 
@@ -24,7 +24,7 @@ allprojects {
 ```
 ```gradle
 dependencies {
-  implementation 'com.github.NieKam:EdgeProgressBar:1.0.1'
+  implementation 'com.github.NieKam:EdgeProgressBar:1.0.2'
 }
 ```
 # Info
@@ -66,6 +66,9 @@ In indeterminate mode you can choose between following effects:
 
 <img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/snake.gif" width="25%" height="25%">
 
+3. Glow
+
+No image available
 
 Indeterminate progress could use following attributes:
 
