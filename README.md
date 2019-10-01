@@ -101,12 +101,8 @@ Check sample app to find how use progress bar in full screen:
   
   <com.niekam.edgeprogressbar.EdgeProgress
       android:id="@+id/edgeProgress"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       />
   
   </android.support.constraint.ConstraintLayout>
