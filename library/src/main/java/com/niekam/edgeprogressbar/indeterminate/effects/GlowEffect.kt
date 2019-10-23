@@ -30,11 +30,11 @@ class GlowEffect : Effect {
             mPaint.maskFilter = BlurMaskFilter(BLUR, BlurMaskFilter.Blur.SOLID)
         }
 
-        start()
+        startEffect()
     }
 
     override fun onDetached() {
-        stop()
+        stopEffect()
         mContract = null
     }
 
@@ -58,7 +58,7 @@ class GlowEffect : Effect {
         reset()
     }
 
-    private fun start() {
+    private fun startEffect() {
         val contract = requireNotNull(mContract)
 
         if (isPending()) {
@@ -74,12 +74,10 @@ class GlowEffect : Effect {
                 mPaint.strokeWidth = listener.animatedValue as Float
                 mContract?.requestInvalidate()
             }
-        }
-
-        mIndeterminateAnimation?.start()
+        }.also { it.start() }
     }
 
-    private fun stop() {
+    private fun stopEffect() {
         if (!isPending()) {
             Log.e(TAG, "Indeterminate animation already stopped. Exit")
             return
@@ -116,8 +114,8 @@ class GlowEffect : Effect {
 
     private fun reset() {
         if (isPending()) {
-            stop()
-            start()
+            stopEffect()
+            startEffect()
         }
     }
 }

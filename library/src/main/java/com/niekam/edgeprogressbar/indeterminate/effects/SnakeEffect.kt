@@ -30,11 +30,11 @@ class SnakeEffect : Effect {
         mContract = contract
         mPaint.initLinePaint(contract.getLineWidthInPx(), contract.getFirstColor())
         mPaint.shader = getShader(contract.getFirstColor(), contract.getSecondaryColor())
-        start()
+        startEffect()
     }
 
     override fun onDetached() {
-        stop()
+        stopEffect()
         mContract = null
     }
 
@@ -57,7 +57,7 @@ class SnakeEffect : Effect {
     }
 
 
-    private fun start() {
+    private fun startEffect() {
         require(mContract != null)
         val contract = mContract as ViewContract
 
@@ -66,25 +66,22 @@ class SnakeEffect : Effect {
             return
         }
 
-        mMoveAnimation =
-            ObjectAnimator.ofFloat((contract.getTotalLineLength() * PATH_DASH_SEGMENTS), 0F)
-        mMoveAnimation?.repeatCount = ValueAnimator.INFINITE
-        mMoveAnimation?.duration = MOVE_ANIMATION_DURATION_MS
-        mMoveAnimation?.interpolator = AccelerateDecelerateInterpolator()
-        mMoveAnimation?.addUpdateListener { it ->
-            mPaint.pathEffect = DashPathEffect(
-                floatArrayOf(mLineSegmentSize, mLineSegmentSize),
-                it.animatedValue as Float
-            )
-            mContract?.requestInvalidate()
-        }
-
-        mMoveAnimation?.start()
-
+        mMoveAnimation = ObjectAnimator.ofFloat((contract.getTotalLineLength() * PATH_DASH_SEGMENTS), 0F).apply {
+            repeatCount = ValueAnimator.INFINITE
+            duration = MOVE_ANIMATION_DURATION_MS
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+                mPaint.pathEffect = DashPathEffect(
+                    floatArrayOf(mLineSegmentSize, mLineSegmentSize),
+                    it.animatedValue as Float
+                )
+                mContract?.requestInvalidate()
+            }
+        }.also { it.start() }
         mPaint.color = contract.getFirstColor()
     }
 
-    private fun stop() {
+    private fun stopEffect() {
         if (!isPending()) {
             Log.e(TAG, "Indeterminate animation already stopped. Exit")
             return
@@ -124,8 +121,8 @@ class SnakeEffect : Effect {
 
     private fun reset() {
         if (isPending()) {
-            stop()
-            start()
+            stopEffect()
+            startEffect()
         }
     }
 }

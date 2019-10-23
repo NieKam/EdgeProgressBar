@@ -36,11 +36,11 @@ class ZigZagEffect : Effect {
             mPaint.shader = getShader(it.getFirstColor(), it.getSecondaryColor())
         }
 
-        start()
+        startEffect()
     }
 
     override fun onDetached() {
-        stop()
+        stopEffect()
         mContract = null
     }
 
@@ -64,7 +64,7 @@ class ZigZagEffect : Effect {
         reset()
     }
 
-    private fun start() {
+    private fun startEffect() {
         require(mContract != null)
         val contract = mContract as ViewContract
 
@@ -73,19 +73,18 @@ class ZigZagEffect : Effect {
             return
         }
 
-        mIndeterminateAnimation =
-            ObjectAnimator.ofFloat((contract.getTotalLineLength() * DASH_LINE_COUNT), 0F)
-        mIndeterminateAnimation?.repeatCount = ValueAnimator.INFINITE
-        mIndeterminateAnimation?.duration = INDETERMINATE_ANIMATION_DURATION_MS
-        mIndeterminateAnimation?.interpolator = LinearInterpolator()
-        mIndeterminateAnimation?.addUpdateListener { it ->
-            mDashPaint.pathEffect = DashPathEffect(
-                floatArrayOf(mLineSegmentSize, mLineSegmentSize),
-                it.animatedValue as Float
-            )
-            mContract?.requestInvalidate()
-        }
-        mIndeterminateAnimation?.start()
+        mIndeterminateAnimation = ObjectAnimator.ofFloat((contract.getTotalLineLength() * DASH_LINE_COUNT), 0F).apply {
+            repeatCount = ValueAnimator.INFINITE
+            duration = INDETERMINATE_ANIMATION_DURATION_MS
+            interpolator = LinearInterpolator()
+            addUpdateListener {
+                mDashPaint.pathEffect = DashPathEffect(
+                    floatArrayOf(mLineSegmentSize, mLineSegmentSize),
+                    it.animatedValue as Float
+                )
+                mContract?.requestInvalidate()
+            }
+        }.also { it.start() }
 
         val argbEvaluator = ArgbEvaluator()
         mDashPaint.color = argbEvaluator.evaluate(
@@ -95,7 +94,7 @@ class ZigZagEffect : Effect {
         ) as Int
     }
 
-    private fun stop() {
+    private fun stopEffect() {
         if (!isPending()) {
             Log.e(TAG, "Indeterminate animation already stopped. Exit")
             return
@@ -106,8 +105,10 @@ class ZigZagEffect : Effect {
     }
 
     override fun onDraw(canvas: Canvas, path: Path) {
-        canvas.drawPath(path, mPaint)
-        canvas.drawPath(path, mDashPaint)
+        canvas.run {
+            drawPath(path, mPaint)
+            drawPath(path, mDashPaint)
+        }
     }
 
     override fun onMeasure() {
@@ -136,8 +137,8 @@ class ZigZagEffect : Effect {
 
     private fun reset() {
         if (isPending()) {
-            stop()
-            start()
+            stopEffect()
+            startEffect()
         }
     }
 }

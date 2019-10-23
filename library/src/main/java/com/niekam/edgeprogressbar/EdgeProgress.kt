@@ -4,10 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import com.niekam.edgeprogressbar.Constants.BLANK_LINE_SIZE
@@ -59,6 +62,7 @@ class EdgeProgress @JvmOverloads constructor(
      */
     init {
         setLayerType(LAYER_TYPE_SOFTWARE, null)
+        addFlags()
         val a = context.obtainStyledAttributes(attrs, R.styleable.EdgeProgress, defStyleAttr, 0)
 
         try {
@@ -139,8 +143,10 @@ class EdgeProgress @JvmOverloads constructor(
         if (mIsIndeterminate) {
             mIndeterminateEffect?.onDraw(canvas, mProgressPath)
         } else {
-            canvas.drawPath(mProgressPath, mTintPaint)
-            canvas.drawPath(mProgressPath, mProgressPaint)
+            canvas.run {
+                drawPath(mProgressPath, mTintPaint)
+                drawPath(mProgressPath, mProgressPaint)
+            }
         }
     }
 
@@ -157,9 +163,10 @@ class EdgeProgress @JvmOverloads constructor(
 
     fun setSecondColor(color: Int) {
         mSecondaryColor = color
-
-        mTintPaint.color = mSecondaryColor
-        mTintPaint.alpha = TINT_ALPHA
+        mTintPaint.let {
+            it.color = mSecondaryColor
+            it.alpha = TINT_ALPHA
+        }
         mIndeterminateEffect?.onSecondaryColorChange(mSecondaryColor)
         invalidate()
     }
@@ -242,8 +249,10 @@ class EdgeProgress @JvmOverloads constructor(
         mIndeterminateEffect = effect.effect
 
         if (mIsIndeterminate) {
-            mIndeterminateEffect?.onAttached(this)
-            mIndeterminateEffect?.onMeasure()
+            mIndeterminateEffect?.let {
+                it.onAttached(this)
+                it.onMeasure()
+            }
         }
     }
 
@@ -259,22 +268,21 @@ class EdgeProgress @JvmOverloads constructor(
         // Save original value
         mLineWidthSavedValue = mLineWidth
 
-        ObjectAnimator.ofFloat(mLineWidth, 0F).let {
-            it.duration = VISIBILITY_ANIM_DURATION
-            it.interpolator = AccelerateInterpolator()
-            it.addUpdateListener { l ->
+        ObjectAnimator.ofFloat(mLineWidth, 0F).apply {
+            duration = VISIBILITY_ANIM_DURATION
+            interpolator = AccelerateInterpolator()
+            addUpdateListener { l ->
                 mLineWidth = l.animatedValue as Float
                 mProgressPaint.strokeWidth = mLineWidth
                 mTintPaint.strokeWidth = mLineWidth
                 invalidate()
             }
-            it.addListener(object : AnimatorListenerAdapter() {
+            addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     visibility = GONE
                 }
             })
-            it.start()
-        }
+        }.start()
     }
 
     fun show() {
@@ -282,22 +290,21 @@ class EdgeProgress @JvmOverloads constructor(
             return
         }
 
-        ObjectAnimator.ofFloat(0F, mLineWidthSavedValue).let {
-            it.duration = VISIBILITY_ANIM_DURATION
-            it.interpolator = AccelerateInterpolator()
-            it.addUpdateListener { l ->
+        ObjectAnimator.ofFloat(0F, mLineWidthSavedValue).apply {
+            duration = VISIBILITY_ANIM_DURATION
+            interpolator = AccelerateInterpolator()
+            addUpdateListener { l ->
                 mLineWidth = l.animatedValue as Float
                 mProgressPaint.strokeWidth = mLineWidth
                 mTintPaint.strokeWidth = mLineWidth
                 invalidate()
             }
-            it.addListener(object : AnimatorListenerAdapter() {
+            addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationStart(animation: Animator?) {
                     visibility = VISIBLE
                 }
             })
-            it.start()
-        }
+        }.start()
     }
 
     override fun getLineWidthInPx(): Float {
@@ -352,6 +359,20 @@ class EdgeProgress @JvmOverloads constructor(
         return mPathMeasure.length
     }
 
+    private fun addFlags() {
+        if (context !is Activity) {
+            return
+        }
+
+        (context as Activity).apply {
+            window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+            }
+        }
+    }
+
     private fun adjustInset(): Float {
         val maxWidth = 4.dpToPx
         return if (mLineWidth >= maxWidth) {
@@ -378,16 +399,17 @@ class EdgeProgress @JvmOverloads constructor(
             return
         }
 
-        mProgressAnimation = ObjectAnimator.ofFloat(mProgressPhase, targetPhase)
-        mProgressAnimation?.let {
-            it.duration = mProgressAnimationDuration
-            it.interpolator = LinearInterpolator()
-            it.addUpdateListener { l ->
+        mProgressAnimation = ObjectAnimator.ofFloat(mProgressPhase, targetPhase).apply {
+            duration = mProgressAnimationDuration
+            interpolator = LinearInterpolator()
+            addUpdateListener { l ->
                 mProgressPaint.pathEffect = createPathEffect(mTotalLength, l.animatedValue as Float)
                 invalidate()
             }
+        }.also {
             it.start()
         }
+
         mProgressPhase = targetPhase
     }
 

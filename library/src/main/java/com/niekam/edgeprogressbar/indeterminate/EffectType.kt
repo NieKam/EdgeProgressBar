@@ -7,10 +7,8 @@ import com.niekam.edgeprogressbar.indeterminate.effects.ZigZagEffect
 /**
  * Copyright by Kamil Niezrecki
  */
-enum class EffectType(indeterminateEffect: Effect) {
+enum class EffectType(val effect: Effect) {
     ZIGZAG(ZigZagEffect()),
     SNAKE(SnakeEffect()),
     GLOW(GlowEffect());
-
-    val effect = indeterminateEffect
 }
