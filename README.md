@@ -24,7 +24,7 @@ allprojects {
 ```
 ```gradle
 dependencies {
-  implementation 'com.github.NieKam:EdgeProgressBar:1.0.2'
+  implementation 'com.github.NieKam:EdgeProgressBar:XXX'
 }
 ```
 # Info
@@ -39,20 +39,21 @@ This mode is default one. Progress will be drawn around the screen edges. You us
 | first_color  |  color  |
 | second_color  | color  |
 | line_width  | dimmension  |
+| corner_radius  | float  |
 | max  | integer  |
 | start_progress  | float  |
 | progress_anim_duration  | integer  |
 
 
-<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/Screenshot_1526048947.png" width="25%" height="25%">
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/screenshot.png" width="25%" height="25%">
 
 
-`progress_color` is orange 
+`progress_color` is orange
 `tint_color` is yellow
 
 - #### Indeterminate
 
-To use this mode you need to add attribute 
+To use this mode you need to add attribute
 
 `indeterminate="true"`
 
@@ -68,21 +69,21 @@ In indeterminate mode you can choose between following effects:
 
 3. Glow
 
-No image available
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/glow.gif" width="25%" height="25%">
 
 Indeterminate progress could use following attributes:
 
 | Attribute name    | Type |
-| -------------   | ------------- | 
-| first_color  |  color  | 
-| second_color  | color  | 
-| line_width  | dimmension  | 
-| indeterminate  | boolean  | 
-| indeterminate_type  | enum  | 
+| -------------   | ------------- |
+| first_color  |  color  |
+| second_color  | color  |
+| line_width  | dimmension  |
+| indeterminate  | boolean  |
+| indeterminate_type  | enum  |
 
-Check sample app to find how use progress bar in full screen:
+View allows you to display line as progress
 
-<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/demo.gif" width="25%" height="25%">
+<img src="https://github.com/NieKam/EdgeProgressBar/blob/master/screenshots/progress.gif" width="25%" height="25%">
 
 # Usage
 
@@ -98,15 +99,15 @@ Check sample app to find how use progress bar in full screen:
     android:layout_height="match_parent"
     >
   ...
-  
+
   <com.niekam.edgeprogressbar.EdgeProgress
       android:id="@+id/edgeProgress"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       />
-  
+
   </android.support.constraint.ConstraintLayout>
 ```
 
 ## PS
-Feel free to send your sugestions. Next step is to make better indeterminate effects.
+Feel free to send your suggestions. Next step is to make better indeterminate effects.
